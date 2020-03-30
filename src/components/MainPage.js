@@ -1,50 +1,42 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import openSocket from 'socket.io-client';
+import React, { useState } from 'react';
+import { push } from 'connected-react-router';
+import { connect } from 'react-redux';
 
-const socket = openSocket('http://localhost:8080');
-
-const MainPage = () => {
+const MainPage = (props) => {
+  console.log(props);
   const [input, setInput] = useState();
-  const [dialog, setDialog] = useState([]);
-
-  const addNewMessage = useCallback(
-    (message) => {
-      setDialog([...dialog, message]);
-    },
-    [setDialog, dialog],
-  );
-
-  useEffect(() => {
-    socket.on('message', addNewMessage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addNewMessage]);
 
   const getInput = (event) => {
     setInput(event.target.value);
   };
 
-  const sendValue = (message, name) => {
-    socket.emit('chat message', message, name);
-  };
+  // const redirectToDialog = () => {
+  //   console.log(props);
+  //   push('/dialog');
+  // };
 
   return (
     <div>
       <input onChange={getInput} type="text" />
-      <button onClick={() => sendValue(input, 'EUGENE')} type="button">
-        SEND_1
+      {/* eslint-disable-next-line react/prop-types */}
+      <button onClick={() => props.push('/dialog')} type="button">
+        CONNECT
       </button>
-      <button onClick={() => sendValue(input, 'VASYAN')} type="button">
-        SEND_2
-      </button>
-      {dialog.map((data) => (
-        <p key={data.timestamp}>
-          {data.name}
-          <br />
-          {data.msg}
-        </p>
-      ))}
     </div>
   );
 };
 
-export default MainPage;
+const mapStateToProps = (state) => {
+  const { test, router } = state;
+  return {
+    test,
+    router,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+  push,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

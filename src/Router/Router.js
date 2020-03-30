@@ -1,13 +1,20 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import MainPage from '../components/MainPage';
+import DialogPage from '../components/DialogPage';
+import NoMatch from '../components/NoMatch';
 
-export default function Router() {
+const Router = () => {
+  console.log('router');
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/">{() => <MainPage />}</Route>
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route path="/dialog" render={() => <DialogPage />} />
+      <Route exact path="/">
+        {() => <MainPage />}
+      </Route>
+      <Route path="*">{() => <NoMatch />}</Route>
+    </Switch>
   );
-}
+};
+
+export default Router;
