@@ -1,14 +1,14 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import MainPage from '../components/MainPage';
-import DialogPage from '../components/DialogPage';
+// import DialogPage from '../components/DialogPage';
 import NoMatch from '../components/NoMatch';
 
 const Router = () => {
   console.log('router');
   return (
     <Switch>
-      <Route path="/dialog" render={() => <DialogPage />} />
+      <Route path="/dialog">{() => <div> DIALOGS </div>}</Route>
       <Route exact path="/">
         {() => <MainPage />}
       </Route>

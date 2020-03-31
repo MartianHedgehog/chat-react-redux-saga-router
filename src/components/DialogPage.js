@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
-
 import openSocket from 'socket.io-client';
 import mapStateToProps from 'react-redux/lib/connect/mapStateToProps';
 
@@ -35,10 +34,6 @@ const DialogPage = (props) => {
   };
   return (
     <div>
-      <input onChange={getInput} type="text" />
-      <button onClick={() => sendValue(input, 'EUGENE')} type="button">
-        SEND
-      </button>
       {dialog.map((data) => (
         <p key={data.timestamp}>
           {data.name}
@@ -46,6 +41,10 @@ const DialogPage = (props) => {
           {data.msg}
         </p>
       ))}
+      <input onChange={getInput} type="text" />
+      <button onClick={() => sendValue(input, 'EUGENE')} type="button">
+        SEND
+      </button>
     </div>
   );
 };

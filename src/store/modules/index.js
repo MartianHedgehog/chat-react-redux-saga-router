@@ -1,16 +1,15 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
+import userInformation from './userInformation';
+import dialog from './dialog';
 
 const RootReducer = (history) => {
   const router = connectRouter(history);
   return combineReducers({
     router,
-    test: () => ({ test: 'test' }),
+    userInformation,
+    dialog,
   });
 };
 
 export default RootReducer;
-
-// export default combineReducers({
-//   test: () => ({ test: "test" }),
-// });
