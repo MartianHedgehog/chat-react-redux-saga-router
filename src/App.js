@@ -1,7 +1,8 @@
 import React from 'react';
 import Router from './Router/Router';
 
-function App() {
+function App(props) {
+  console.log(props);
   return <Router />;
 }
 
