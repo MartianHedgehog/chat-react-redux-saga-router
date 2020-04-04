@@ -1,20 +1,21 @@
 import { v4 } from 'uuid';
 
-const CONNECT_TO_SERVER = 'CONNECT_TO_SERVER';
+export const CONNECT_TO_SERVER = 'CONNECT_TO_SERVER';
 
 const userInformation = (state = {}, action) => {
-  if (action.type === 'CONNECT_TO_SERVER') {
+  if (action.type === CONNECT_TO_SERVER) {
     return {
       ...state,
-      userName: action.userName,
+      username: action.username,
+      userId: action.userId,
     };
   }
   return state;
 };
 
-export const connectToServer = (userName) => ({
+export const connectToServer = (username) => ({
   type: CONNECT_TO_SERVER,
-  userName,
+  username,
   userId: v4(),
 });
 

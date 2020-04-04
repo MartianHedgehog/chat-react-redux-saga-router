@@ -1,11 +1,10 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { connectToServer } from '../store/modules/userInformation';
 
 const MainPage = (props) => {
-  console.log(props);
   const [input, setInput] = useState();
 
   const getInput = (event) => {
@@ -13,16 +12,13 @@ const MainPage = (props) => {
   };
 
   const connecting = () => {
-    // eslint-disable-next-line react/prop-types
-    props.dispatch(connectToServer(input));
-    // eslint-disable-next-line react/prop-types
+    props.connectToServer(input);
     props.push('/dialog');
   };
 
   return (
     <div>
       <input onChange={getInput} type="text" />
-      {/* eslint-disable-next-line react/prop-types */}
       <button onClick={() => connecting()} type="button">
         CONNECT
       </button>
@@ -38,11 +34,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    ...bindActionCreators({ push }, dispatch),
-    dispatch,
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default connect(mapStateToProps, { push, connectToServer })(MainPage);

@@ -3,7 +3,6 @@ import React from 'react';
 
 const NoMatch = () => {
   const location = useLocation();
-
   return (
     <div>
       <h3>

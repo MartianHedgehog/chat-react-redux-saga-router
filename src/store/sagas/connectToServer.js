@@ -1,7 +1,8 @@
-import { call, fork, take, put, takeEvery } from 'redux-saga/effects';
+import { call, fork, take, put, takeLatest } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import openSocket from 'socket.io-client';
-import { receiveDialog } from '../modules/dialog';
+import { receiveDialog, SEND_MESSAGE } from '../modules/dialog';
+import { CONNECT_TO_SERVER } from '../modules/userInformation';
 
 const connect = () => {
   const socket = openSocket('http://localhost:8080');
@@ -24,13 +25,6 @@ const createSocketChannel = (socket) => {
     };
   });
 };
-// function subscribe(socket) {
-//   while (true) {
-//     socket.on('dialog', (dialog) => {
-//       emitter(put(receiveDialog(dialog)));
-//     });
-//   }
-// }
 
 function* read(socket) {
   const channel = yield call(createSocketChannel, socket);
@@ -42,7 +36,7 @@ function* read(socket) {
 
 function* write(socket) {
   while (true) {
-    const { name, msg } = yield take('SEND_MESSAGE');
+    const { name, msg } = yield take(SEND_MESSAGE);
     socket.emit('message', name, msg);
   }
 }
@@ -60,5 +54,5 @@ function* connectionToServer() {
 }
 
 export default function* watchConnectToServer() {
-  yield takeEvery('CONNECT_TO_SERVER', connectionToServer);
+  yield takeLatest(CONNECT_TO_SERVER, connectionToServer);
 }

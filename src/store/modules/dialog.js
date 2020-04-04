@@ -1,7 +1,7 @@
 const RECEIVE_DIALOG = 'RECEIVE_DIALOG';
 const RECEIVE_DIALOG_ERROR = 'RECEIVE_DIALOG_ERROR';
 
-const SEND_MESSAGE = 'SEND_MESSAGE';
+export const SEND_MESSAGE = 'SEND_MESSAGE';
 
 const dialog = (state = {}, action) => {
   switch (action.type) {

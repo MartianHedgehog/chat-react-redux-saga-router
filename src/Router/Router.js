@@ -5,14 +5,17 @@ import DialogPage from '../components/DialogPage';
 import NoMatch from '../components/NoMatch';
 
 const Router = () => {
-  console.log('router');
   return (
     <Switch>
-      <Route path="/dialog">{() => <DialogPage />}</Route>
-      <Route exact path="/">
-        {() => <MainPage />}
+      <Route path="/dialog">
+        <DialogPage />
       </Route>
-      <Route path="*">{() => <NoMatch />}</Route>
+      <Route exact path="/">
+        <MainPage />
+      </Route>
+      <Route path="*">
+        <NoMatch />
+      </Route>
     </Switch>
   );
 };
