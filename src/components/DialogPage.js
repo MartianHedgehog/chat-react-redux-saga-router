@@ -1,55 +1,89 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import { MessageBox, Input, Button } from 'react-chat-elements';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../store/modules/dialog';
+import { connectToServer } from '../store/modules/connection';
+import DialogList from './DialogList';
+
+import 'react-chat-elements/dist/main.css';
+import '../assets/css/argon-design-system-react.css';
+import './DialogPage.css';
 
 const DialogPage = (props) => {
-  const { dialog, userInformation } = props;
-  const [input, setInput] = useState();
-  const [MessagesFeed, setMessagesFeed] = useState();
+  const { dialog, userInformation, connectionStatus } = props;
+  const [chatHeight, setChatHeight] = useState();
+
+  const chatPageHeight = useRef();
+  const chatInputHeight = useRef();
+  const divMessages = useRef();
+  const messageInput = useRef();
 
   useEffect(() => {
-    setMessagesFeed(dialog);
-  }, [MessagesFeed, dialog]);
+    setChatHeight(chatPageHeight.current.clientHeight);
+    divMessages.current.scrollIntoView({ block: 'end' });
 
-  const getInput = (event) => {
-    setInput(event.target.value);
-  };
+    window.addEventListener('resize', () => {
+      setChatHeight(chatPageHeight.current.clientHeight);
+    });
+  }, []);
 
-  const messageBox = (data) => {
+  if (connectionStatus === 'disconnected') {
+    props.connectToServer();
+  }
+
+  const message = (data) => {
     return (
-      <p key={data.timestamp}>
-        {data.name}
-        <br />
-        {data.msg}
-      </p>
+      <MessageBox
+        position={userInformation.username === data.name ? 'right' : 'left'}
+        date={data.timestamp}
+        text={data.msg}
+        title={data.name}
+        key={data.timestamp}
+      />
     );
   };
 
-  const sendValue = (msg, name) => {
-    props.sendMessage(name, msg);
+  const sendValue = (event) => {
+    event.preventDefault();
+
+    props.sendMessage(userInformation.username, messageInput.current.input.value);
+    messageInput.current.clear();
   };
   return (
-    <div>
-      {!(typeof MessagesFeed === 'undefined')
-        ? Object.entries(MessagesFeed).map((el) => messageBox(el[1]))
-        : null}
-      <input onChange={getInput} type="text" />
-      <button onClick={() => sendValue(input, userInformation.username)} type="button">
-        {`SEND AS ${userInformation.username}`}
-      </button>
+    <div ref={chatPageHeight} className="chat-page">
+      <DialogList className="chat-list" />
+      <div className="dialog" style={{ height: chatHeight || 0 }}>
+        <div className="messages" ref={divMessages}>
+          {Object.entries(dialog).length ? (
+            Object.entries(dialog).map((el) => message(el[1]))
+          ) : (
+            <p className="lead">No messages here</p>
+          )}
+        </div>
+        <form ref={chatInputHeight} className="message-input" onSubmit={sendValue}>
+          <Input
+            ref={messageInput}
+            type="text"
+            placeholder="Message..."
+            autofocus
+            autoHeight
+            rightButtons={<Button backgroundColor="#2dce89" type="submit" text="SEND" />}
+          />
+        </form>
+      </div>
     </div>
   );
 };
 
 const mapStateToProps = (state) => {
-  const { dialog, userInformation } = state;
-  console.log(state);
+  const { dialog, userInformation, connection } = state;
+  const { connectionStatus } = connection;
   return {
     dialog,
     userInformation,
+    connectionStatus,
   };
 };
-console.log(DialogPage.defaultProps);
 
-export default connect(mapStateToProps, { sendMessage })(DialogPage);
+export default connect(mapStateToProps, { sendMessage, connectToServer })(DialogPage);

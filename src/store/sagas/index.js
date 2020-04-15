@@ -1,3 +1,4 @@
 import watchConnectToServer from './connectToServer';
+import triggerUserCheck from './triggerUserCheck';
 
-export default [watchConnectToServer];
+export default [triggerUserCheck, watchConnectToServer];

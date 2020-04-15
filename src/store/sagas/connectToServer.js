@@ -1,13 +1,16 @@
-import { call, fork, take, put, takeLatest } from 'redux-saga/effects';
+import { call, fork, take, put, takeLatest, select } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import openSocket from 'socket.io-client';
 import { receiveDialog, SEND_MESSAGE } from '../modules/dialog';
-import { CONNECT_TO_SERVER } from '../modules/userInformation';
+import { CONNECT_TO_SERVER } from '../modules/connection';
 
-const connect = () => {
+const getUserInformation = (state) => state.userInformation;
+
+const connect = (info) => {
   const socket = openSocket('http://localhost:8080');
   return new Promise((resolve) => {
     socket.on('connect', () => {
+      socket.emit('userCheck', info);
       resolve(socket);
     });
   });
@@ -47,7 +50,8 @@ function* handleIO(socket) {
 }
 
 function* connectionToServer() {
-  const socket = yield call(connect);
+  const userInfo = yield select(getUserInformation);
+  const socket = yield call(connect, userInfo);
   while (true) {
     yield call(handleIO, socket);
   }
