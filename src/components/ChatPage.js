@@ -2,16 +2,16 @@
 import { MessageBox, Input, Button } from 'react-chat-elements';
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { sendMessage } from '../store/modules/dialog';
+import { sendMessage } from '../store/modules/dialogs';
 import { connectToServer } from '../store/modules/connection';
-import DialogList from './DialogList';
+import ChatList from './ChatList';
 
 import 'react-chat-elements/dist/main.css';
 import '../assets/css/argon-design-system-react.css';
-import './DialogPage.css';
+import './ChatPage.css';
 
-const DialogPage = (props) => {
-  const { dialog, userInformation, connectionStatus } = props;
+const ChatPage = (props) => {
+  const { dialogs, userInformation, connectionStatus } = props;
   const [chatHeight, setChatHeight] = useState();
 
   const chatPageHeight = useRef();
@@ -32,18 +32,6 @@ const DialogPage = (props) => {
     props.connectToServer();
   }
 
-  const message = (data) => {
-    return (
-      <MessageBox
-        position={userInformation.username === data.name ? 'right' : 'left'}
-        date={data.timestamp}
-        text={data.msg}
-        title={data.name}
-        key={data.timestamp}
-      />
-    );
-  };
-
   const sendValue = (event) => {
     event.preventDefault();
 
@@ -52,13 +40,21 @@ const DialogPage = (props) => {
   };
   return (
     <div ref={chatPageHeight} className="chat-page">
-      <DialogList className="chat-list" />
+      <ChatList />
       <div className="dialog" style={{ height: chatHeight || 0 }}>
         <div className="messages" ref={divMessages}>
-          {Object.entries(dialog).length ? (
-            Object.entries(dialog).map((el) => message(el[1]))
+          {Object.prototype.hasOwnProperty.call(dialogs, 'roomName') ? (
+            dialogs.roomName.map((el) => (
+              <MessageBox
+                position={userInformation.username === el.name ? 'right' : 'left'}
+                date={el.timestamp}
+                text={el.msg}
+                title={el.name}
+                key={el.timestamp}
+              />
+            ))
           ) : (
-            <p className="lead">No messages here</p>
+            <p>No messages here yet</p>
           )}
         </div>
         <form ref={chatInputHeight} className="message-input" onSubmit={sendValue}>
@@ -77,13 +73,13 @@ const DialogPage = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const { dialog, userInformation, connection } = state;
+  const { dialogs, userInformation, connection } = state;
   const { connectionStatus } = connection;
   return {
-    dialog,
+    dialogs,
     userInformation,
     connectionStatus,
   };
 };
 
-export default connect(mapStateToProps, { sendMessage, connectToServer })(DialogPage);
+export default connect(mapStateToProps, { sendMessage, connectToServer })(ChatPage);

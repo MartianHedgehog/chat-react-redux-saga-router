@@ -3,11 +3,12 @@ const RECEIVE_DIALOG_ERROR = 'RECEIVE_DIALOG_ERROR';
 
 export const SEND_MESSAGE = 'SEND_MESSAGE';
 
-const dialog = (state = {}, action) => {
+const dialogs = (state = {}, action) => {
   switch (action.type) {
     case RECEIVE_DIALOG: {
       return {
-        ...action.receivedDialog,
+        ...state,
+        roomName: action.receivedDialog,
       };
     }
     case RECEIVE_DIALOG_ERROR: {
@@ -38,4 +39,4 @@ export const pullDialogError = (error) => ({
   error,
 });
 
-export default dialog;
+export default dialogs;

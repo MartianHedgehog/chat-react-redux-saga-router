@@ -1,7 +1,7 @@
 import { call, fork, take, put, takeLatest, select } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import openSocket from 'socket.io-client';
-import { receiveDialog, SEND_MESSAGE } from '../modules/dialog';
+import { receiveDialog, SEND_MESSAGE } from '../modules/dialogs';
 import { CONNECT_TO_SERVER } from '../modules/connection';
 
 const getUserInformation = (state) => state.userInformation;

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import connection from './connection';
-import dialog from './dialog';
+import dialogs from './dialogs';
 import userInformation from './userInformation';
 
 const RootReducer = (history) => {
@@ -10,7 +10,7 @@ const RootReducer = (history) => {
     router,
     connection,
     userInformation,
-    dialog,
+    dialogs,
   });
 };
 

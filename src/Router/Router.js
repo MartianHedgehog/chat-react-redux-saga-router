@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import MainPage from '../components/MainPage';
-import DialogPage from '../components/DialogPage';
+import DialogPage from '../components/ChatPage';
 import NoMatch from '../components/NoMatch';
 import Header from '../components/Header';
 

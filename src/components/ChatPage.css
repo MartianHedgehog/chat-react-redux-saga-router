@@ -1,16 +1,11 @@
 .chat-page {
     flex: 1 1 auto;
     display: flex;
-}
-
-.chat-list {
-    flex: 0 0 auto;
-    width: 200px;
+    background-color: #f7f7f7;
 }
 
 .dialog {
     flex: 1 0 auto;
-    /*height: 563px;*/
     display: flex;
     flex-direction: column;
     overflow: auto;
