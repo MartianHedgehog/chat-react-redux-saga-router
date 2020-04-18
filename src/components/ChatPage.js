@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 import { MessageBox, Input, Button } from 'react-chat-elements';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../store/modules/dialogs';
 import { connectToServer } from '../store/modules/connection';
 import ChatList from './ChatList';
+import throttle from '../utils/throttle';
 
 import 'react-chat-elements/dist/main.css';
 import '../assets/css/argon-design-system-react.css';
@@ -13,33 +14,40 @@ import './ChatPage.css';
 const ChatPage = (props) => {
   const { dialogs, userInformation, connectionStatus } = props;
   const [chatHeight, setChatHeight] = useState();
+  const [isDisabled, setIsDisabled] = useState(true);
 
-  const chatPageHeight = useRef();
-  const chatInputHeight = useRef();
+  const chatPage = useRef();
+  const chatInput = useRef();
   const divMessages = useRef();
   const messageInput = useRef();
 
   useEffect(() => {
-    setChatHeight(chatPageHeight.current.clientHeight);
-    divMessages.current.scrollIntoView({ block: 'end' });
-
+    setChatHeight(chatPage.current.clientHeight);
     window.addEventListener('resize', () => {
-      setChatHeight(chatPageHeight.current.clientHeight);
+      setChatHeight(chatPage.current.clientHeight);
     });
   }, []);
-
+  useEffect(() => {
+    divMessages.current.scrollTop = divMessages.current.clientHeight;
+  }, [dialogs]);
+  const updateInput = useCallback(
+    throttle(() => setIsDisabled(!messageInput?.current?.input.value), 100),
+    [],
+  );
+  // Renewing connection to server
   if (connectionStatus === 'disconnected') {
     props.connectToServer();
   }
-
   const sendValue = (event) => {
     event.preventDefault();
-
+    if (!messageInput.current?.input.value.trim()) {
+      return;
+    }
     props.sendMessage(userInformation.username, messageInput.current.input.value);
     messageInput.current.clear();
   };
   return (
-    <div ref={chatPageHeight} className="chat-page">
+    <div ref={chatPage} className="chat-page">
       <ChatList />
       <div className="dialog" style={{ height: chatHeight || 0 }}>
         <div className="messages" ref={divMessages}>
@@ -57,14 +65,22 @@ const ChatPage = (props) => {
             <p>No messages here yet</p>
           )}
         </div>
-        <form ref={chatInputHeight} className="message-input" onSubmit={sendValue}>
+        <form ref={chatInput} className="message-input" onSubmit={sendValue}>
           <Input
+            onChange={updateInput}
             ref={messageInput}
             type="text"
             placeholder="Message..."
             autofocus
             autoHeight
-            rightButtons={<Button backgroundColor="#2dce89" type="submit" text="SEND" />}
+            rightButtons={
+              <Button
+                disabled={isDisabled}
+                backgroundColor={isDisabled ? 'grey' : '#2dce89'}
+                type="submit"
+                text="SEND"
+              />
+            }
           />
         </form>
       </div>
