@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import store, { history } from './store';
+import 'argon-design-system-free/assets/css/argon.min.css';
 
 ReactDOM.render(
   <Provider store={store}>

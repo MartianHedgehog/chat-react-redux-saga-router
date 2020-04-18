@@ -8,7 +8,6 @@ import ChatList from './ChatList';
 import throttle from '../utils/throttle';
 
 import 'react-chat-elements/dist/main.css';
-import '../assets/css/argon-design-system-react.css';
 import './ChatPage.css';
 
 const ChatPage = (props) => {

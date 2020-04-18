@@ -1,6 +1,5 @@
 import React from 'react';
 
-import '../assets/css/argon-design-system-react.css';
 import { Container } from 'reactstrap';
 
 import './Header.css';
