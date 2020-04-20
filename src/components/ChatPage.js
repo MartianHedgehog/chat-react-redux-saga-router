@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../store/modules/dialogs';
 import { connectToServer } from '../store/modules/connection';
-import ChatList from './ChatList';
+import SideMenu from './SideMenu';
 import throttle from '../utils/throttle';
 
 import 'react-chat-elements/dist/main.css';
@@ -12,7 +12,8 @@ import './ChatPage.css';
 
 const ChatPage = (props) => {
   const { dialogs, userInformation, connectionStatus } = props;
-  const [chatHeight, setChatHeight] = useState();
+
+  const [chatHeight, setChatHeight] = useState(0);
   const [isDisabled, setIsDisabled] = useState(true);
 
   const chatPage = useRef();
@@ -23,20 +24,25 @@ const ChatPage = (props) => {
   useEffect(() => {
     setChatHeight(chatPage.current.clientHeight);
     window.addEventListener('resize', () => {
-      setChatHeight(chatPage.current.clientHeight);
+      setChatHeight(chatPage.current?.clientHeight);
     });
   }, []);
+
   useEffect(() => {
     divMessages.current.scrollTop = divMessages.current.clientHeight;
   }, [dialogs]);
+
+  // Throttling
   const updateInput = useCallback(
     throttle(() => setIsDisabled(!messageInput?.current?.input.value), 100),
     [],
   );
+
   // Renewing connection to server
   if (connectionStatus === 'disconnected') {
     props.connectToServer();
   }
+
   const sendValue = (event) => {
     event.preventDefault();
     if (!messageInput.current?.input.value.trim()) {
@@ -47,7 +53,7 @@ const ChatPage = (props) => {
   };
   return (
     <div ref={chatPage} className="chat-page">
-      <ChatList />
+      <SideMenu />
       <div className="dialog" style={{ height: chatHeight || 0 }}>
         <div className="messages" ref={divMessages}>
           {Object.prototype.hasOwnProperty.call(dialogs, 'roomName') ? (
