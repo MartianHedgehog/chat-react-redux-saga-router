@@ -7,6 +7,7 @@ import {
   connectionError,
   DISCONNECT_FROM_SERVER,
   disconnectFromServer,
+  connectToServer,
 } from '../modules/connection';
 
 const getUserInformation = (state) => state.userInformation;
@@ -32,6 +33,7 @@ const disconnect = () => {
     });
   });
 };
+
 // eslint-disable-next-line no-unused-vars
 const reconnect = () => {
   socket = openSocket('http://localhost:8080');
@@ -41,6 +43,20 @@ const reconnect = () => {
     });
   });
 };
+
+function* listenDisconnect() {
+  while (true) {
+    yield call(disconnect);
+    yield put(disconnectFromServer());
+  }
+}
+
+function* listenReconnect() {
+  while (true) {
+    yield call(reconnect);
+    yield put(connectToServer());
+  }
+}
 
 const createSocketChannel = (server) => {
   return eventChannel((emit) => {
@@ -80,6 +96,8 @@ function* connectionToServer() {
     const userInfo = yield select(getUserInformation);
     socket = yield call(connect, userInfo);
     yield call(handleIO, socket);
+    yield fork(listenReconnect);
+    yield fork(listenDisconnect);
   } catch (error) {
     yield put(connectionError(error));
   } finally {

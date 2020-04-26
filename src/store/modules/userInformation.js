@@ -1,48 +1,35 @@
-export const IS_USER_EXISTS = 'IS_USER_EXISTS';
-export const GET_USER_INFO = 'GET_USER_INFO';
-export const CREATE_USER = 'CREATE_USER';
-export const CREATE_USERNAME = 'CREATE_USERNAME';
-export const CREATE_USER_ID = 'CREATE_USER_ID';
+import { v4 } from 'uuid';
+
+export const AUTHENTICATE = 'AUTHENTICATE';
+export const LOG_IN = 'LOG_IN';
+export const LOG_OUT = 'LOG_OUT';
 export const USER_ERROR = 'USER_ERROR';
 
 // Reducer
 
-const userInformation = (state = {}, action) => {
+const initialState = {
+  username: null,
+  userId: localStorage.getItem('userId') || v4(),
+};
+
+const userInformation = (state = initialState, action) => {
   switch (action.type) {
-    case IS_USER_EXISTS: {
-      return {
-        ...state,
-      };
-    }
-    case GET_USER_INFO: {
-      return {
-        ...state,
-        username: action.username,
-        userId: action.userId,
-      };
-    }
-    case CREATE_USER: {
-      return {
-        ...state,
-        username: action.username,
-        userId: action.userId,
-      };
-    }
-    case CREATE_USERNAME: {
+    case LOG_IN: {
       return {
         ...state,
         username: action.username,
       };
     }
-    case CREATE_USER_ID: {
+    case LOG_OUT: {
       return {
         ...state,
-        userId: action.userId,
+        username: action.username,
       };
     }
     case USER_ERROR: {
       return {
-        ...state, // TODO error case handling
+        ...state,
+        error: action.error,
       };
     }
     default: {
@@ -55,41 +42,24 @@ const userInformation = (state = {}, action) => {
 
 // Actions creators
 
-export const isUserExists = () => ({
-  type: IS_USER_EXISTS,
+export const authenticate = () => ({
+  type: AUTHENTICATE,
 });
 
-export const getUserInfo = () => {
-  return {
-    type: GET_USER_INFO,
-    username: localStorage.getItem('username'),
-    userId: localStorage.getItem('userId'),
-  };
-};
+export const logOut = () => ({
+  type: LOG_OUT,
+  username: null,
+  userId: null,
+});
 
-export const createUser = (username, userId) => {
-  if (username && userId) {
-    return {
-      type: CREATE_USER,
-      username,
-      userId,
-    };
-  }
-  if (username) {
-    return {
-      type: CREATE_USERNAME,
-      username,
-    };
-  }
-  if (userId) {
-    return {
-      type: CREATE_USER_ID,
-      userId,
-    };
-  }
-  return {
-    type: USER_ERROR,
-  };
-};
+export const logIn = (username) => ({
+  type: LOG_IN,
+  username,
+});
+
+export const userError = (error) => ({
+  type: USER_ERROR,
+  error,
+});
 
 export default userInformation;

@@ -10,6 +10,8 @@
     "object-curly-newline": 0,
     "arrow-body-style": 0,
     "react/jsx-one-expression-per-line": 0,
-    "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}]
+    "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}],
+    "no-confusing-arrow": 0,
+    "implicit-arrow-linebreak": 0
   }
 }

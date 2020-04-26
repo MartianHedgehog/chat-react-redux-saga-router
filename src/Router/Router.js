@@ -1,7 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import MainPage from '../components/MainPage';
 import DialogPage from '../components/ChatPage';
+import PrivateRoute from '../components/PrivateRoute';
 import NoMatch from '../components/NoMatch';
 import Header from '../components/Header';
 
@@ -12,9 +14,9 @@ const Router = () => {
     <div className="router-container">
       <Header />
       <Switch>
-        <Route path="/dialog">
+        <PrivateRoute path="/dialog">
           <DialogPage />
-        </Route>
+        </PrivateRoute>
         <Route exact path="/">
           <MainPage />
         </Route>
@@ -26,4 +28,12 @@ const Router = () => {
   );
 };
 
-export default Router;
+const mapDispatchToProps = (state) => {
+  const { userInformation } = state;
+  const { username } = userInformation;
+  return {
+    username,
+  };
+};
+
+export default connect(mapDispatchToProps, null)(Router);

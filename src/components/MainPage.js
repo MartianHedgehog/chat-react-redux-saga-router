@@ -1,68 +1,90 @@
 /* eslint-disable react/prop-types */
 import { Input, Button } from 'react-chat-elements';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { connectToServer } from '../store/modules/connection';
-import { createUser } from '../store/modules/userInformation';
+import { logIn, logOut, authenticate } from '../store/modules/userInformation';
 
 import 'react-chat-elements/dist/main.css';
 import './MainPage.css';
 
 const MainPage = (props) => {
   const [input, setInput] = useState();
+
+  useEffect(() => {
+    props.authenticate();
+  }, [props]);
+
   const { username } = props;
 
   const getInput = (event) => {
     setInput(event.target.value);
   };
 
-  const connecting = () => {
+  const connecting = (event) => {
+    event.preventDefault();
+
     if (!username) {
-      localStorage.setItem('username', input);
-      props.createUser(input, null);
+      props.logIn(input);
     }
     props.connectToServer();
     props.push('/dialog');
   };
 
+  const logOutHandler = () => {
+    props.logOut();
+  };
+
   return (
-    <form className="main-page">
+    <div className="main-page">
       <div className="welcome-container">
         <p className="h1 purple-text-color">Welcome</p>
-        {!username ? (
-          <div className="username-container">
-            <p className="h4" color="#2dce89">
-              Type username:
-            </p>
-            <Input onChange={getInput} type="text" />
+        {username ? (
+          <div className="purple-text-color">
+            <p className="h4">Connect as {username}</p>
           </div>
-        ) : (
-          <p className="h4 purple-text-color"> Connect as {username}</p>
-        )}
-        <Button
-          backgroundColor="#2dce89"
-          id="connect-button"
-          onClick={() => connecting()}
-          type="button"
-          text="CONNECT"
-        />
+        ) : null}
+        <form className="input-container" onSubmit={connecting}>
+          {username ? null : (
+            <div className="username-container">
+              <p className="h4" color="#2dce89">
+                Type username:
+              </p>
+              <Input onChange={getInput} type="text" />
+            </div>
+          )}
+          <Button backgroundColor="#2dce89" type="submit" text="CONNECT" />
+        </form>
+        {username ? (
+          <Button
+            onClick={logOutHandler}
+            id="button-logout-main-page"
+            backgroundColor="transparent"
+            color="red"
+            text="Log out"
+            type="button"
+          />
+        ) : null}
       </div>
-    </form>
+    </div>
   );
 };
 
 const mapStateToProps = (state) => {
   const { router, userInformation } = state;
-  const { username } = userInformation;
+  const { username, userId } = userInformation;
   return {
     router,
     username,
+    userId,
   };
 };
 
 export default connect(mapStateToProps, {
   push,
   connectToServer,
-  createUser,
+  logOut,
+  logIn,
+  authenticate,
 })(MainPage);

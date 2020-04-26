@@ -21,11 +21,14 @@ const ChatPage = (props) => {
   const divMessages = useRef();
   const messageInput = useRef();
 
+  const resizing = () => {
+    return () => setChatHeight(chatPage.current?.clientHeight);
+  };
+
   useEffect(() => {
     setChatHeight(chatPage.current.clientHeight);
-    window.addEventListener('resize', () => {
-      setChatHeight(chatPage.current?.clientHeight);
-    });
+    window.addEventListener('resize', resizing);
+    return () => window.removeEventListener('resize', resizing);
   }, []);
 
   useEffect(() => {
