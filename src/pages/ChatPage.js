@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../store/modules/dialogs';
 import { connectToServer } from '../store/modules/connection';
-import SideMenu from './SideMenu';
+import SideMenu from '../components/SideMenu';
 import throttle from '../utils/throttle';
 
 import 'react-chat-elements/dist/main.css';
@@ -32,7 +32,7 @@ const ChatPage = (props) => {
   }, []);
 
   useEffect(() => {
-    divMessages.current.scrollTop = divMessages.current.clientHeight;
+    divMessages.current.scrollTop = divMessages.current.clientHeight || [];
   }, [dialogs]);
 
   // Throttling

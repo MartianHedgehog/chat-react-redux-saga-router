@@ -2,10 +2,19 @@
     padding-top: 10px;
 }
 
+.h1.display-3 {
+    background: transparent !important;
+}
+
+.shape.shape-style-1.shape-default {
+   background-image: linear-gradient(150deg,#7795f8 15%,#6772e5 70%,#555abf 94%) !important;
+}
+
 .header.d-flex {
     display: flex;
     flex: 1;
     align-items: center;
+    background: transparent;
 }
 
 .header.container {
@@ -23,4 +32,5 @@
 .header-triangle-poligon {
     fill: #f7f7f7;
 }
+
 

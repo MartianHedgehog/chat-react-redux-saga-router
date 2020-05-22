@@ -7,7 +7,7 @@ import './Header.css';
 const Header = () => {
   return (
     <div className="header position-relative">
-      <section className="section section-lg section-shaped">
+      <section id="header-section" className="section section-lg section-shaped">
         <div className="shape shape-style-1 shape-default">
           <span className="span-150" />
           <span className="span-50" />

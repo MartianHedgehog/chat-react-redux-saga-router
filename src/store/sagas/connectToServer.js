@@ -64,7 +64,7 @@ const createSocketChannel = (server) => {
       emit(receiveDialog(data));
     };
     server.on('connection', handler);
-    server.on('dialog', handler);
+    server.on('dialogs', handler);
     return () => {
       server.off('dialog', handler);
     };

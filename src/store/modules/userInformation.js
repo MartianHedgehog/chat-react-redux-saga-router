@@ -24,6 +24,7 @@ const userInformation = (state = initialState, action) => {
       return {
         ...state,
         username: action.username,
+        userId: action.userId,
       };
     }
     case USER_ERROR: {
@@ -49,7 +50,7 @@ export const authenticate = () => ({
 export const logOut = () => ({
   type: LOG_OUT,
   username: null,
-  userId: null,
+  userId: v4(),
 });
 
 export const logIn = (username) => ({

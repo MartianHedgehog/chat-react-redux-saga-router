@@ -1,5 +1,5 @@
-import { put, takeLatest, take } from 'redux-saga/effects';
-import { logIn, LOG_IN, LOG_OUT, AUTHENTICATE } from '../modules/userInformation';
+import { put, fork, take } from 'redux-saga/effects';
+import { logIn, LOG_IN, LOG_OUT } from '../modules/userInformation';
 
 function* authentication() {
   while (true) {
@@ -22,5 +22,5 @@ function* authentication() {
 }
 
 export default function* watchAuthentication() {
-  yield takeLatest(AUTHENTICATE, authentication);
+  yield fork(authentication);
 }

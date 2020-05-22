@@ -1,27 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { ChatList, Button } from 'react-chat-elements';
+import { Button } from 'react-chat-elements';
+import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import { push } from 'connected-react-router';
 import { disconnectFromServer } from '../store/modules/connection';
+// eslint-disable-next-line no-unused-vars
+import SettingsMenu from './SettingsMenu';
+// eslint-disable-next-line no-unused-vars
+import ListOfDialogs from './ListOfDialogs';
+import './SideMenu.css';
 
-import './ChatList.css';
+const SideMenu = () => {
+  const [settingsIsOpen, setSettingsIsOpen] = useState(true);
 
-const SideMenu = (props) => {
-  const disconnectButtonHandler = () => {
-    props.push('/');
-    props.disconnectFromServer();
+  const openSettingsHandler = () => {
+    setSettingsIsOpen(!settingsIsOpen);
   };
+
   return (
-    <div className="chat-list">
+    <div className="side-menu">
       <Button
-        type="button"
-        backgroundColor="red"
-        text="DISCONNECT"
-        onClick={disconnectButtonHandler}
+        text={settingsIsOpen ? 'Dialogs' : 'Settings'}
+        type="Button"
+        onClick={() => openSettingsHandler()}
       />
-      <ChatList />
+      <div className="div-container">
+        <SwitchTransition mode="out-in">
+          <CSSTransition
+            key={settingsIsOpen}
+            classNames="fade"
+            addEndListener={(node, done) => {
+              node.addEventListener('transitionend', done, false);
+            }}
+          >
+            {settingsIsOpen ? <ListOfDialogs /> : <SettingsMenu />}
+          </CSSTransition>
+        </SwitchTransition>
+      </div>
     </div>
   );
 };
 
-export default connect(null, { push, disconnectFromServer })(SideMenu);
+const mapStateToProps = (state) => {
+  const { dialogs } = state;
+  return {
+    dialogs,
+  };
+};
+
+export default connect(mapStateToProps, { push, disconnectFromServer })(SideMenu);

@@ -5,7 +5,7 @@ const NoMatch = () => {
   const location = useLocation();
   return (
     <div>
-      <h3>
+      <h3 className="h3">
         No match for
         {` ${location.pathname}`}
       </h3>

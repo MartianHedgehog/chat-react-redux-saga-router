@@ -3,5 +3,5 @@
   "singleQuote": true,
   "trailingComma": "all",
   "eslint arrow-body-style": ["error", "never"],
-  "no-confusing-arrow": ["error", {"allowParens": true}
+  "no-confusing-arrow": ["error", {"allowParens": true}]
 }

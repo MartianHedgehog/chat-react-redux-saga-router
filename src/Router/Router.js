@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import MainPage from '../components/MainPage';
-import DialogPage from '../components/ChatPage';
+import MainPage from '../pages/MainPage';
+import DialogPage from '../pages/ChatPage';
 import PrivateRoute from '../components/PrivateRoute';
 import NoMatch from '../components/NoMatch';
 import Header from '../components/Header';

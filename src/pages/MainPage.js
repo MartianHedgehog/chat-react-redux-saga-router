@@ -16,7 +16,7 @@ const MainPage = (props) => {
     props.authenticate();
   }, [props]);
 
-  const { username } = props;
+  const { username, userId } = props;
 
   const getInput = (event) => {
     setInput(event.target.value);
@@ -27,6 +27,7 @@ const MainPage = (props) => {
 
     if (!username) {
       props.logIn(input);
+      localStorage.setItem('userId', userId);
     }
     props.connectToServer();
     props.push('/dialog');
@@ -34,6 +35,7 @@ const MainPage = (props) => {
 
   const logOutHandler = () => {
     props.logOut();
+    window.location.reload();
   };
 
   return (
