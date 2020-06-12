@@ -13,7 +13,8 @@ const PrivateRoute = ({ children }) => (
             state: { from: location },
           }}
         />
-      )}
+      )
+    }
   />
 );
 
