@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { connectToServer } from '../store/modules/connection';
-import { logIn, logOut, authenticate } from '../store/modules/userInformation';
+import { logIn, logOut, authenticate, logInViaInstagram } from '../store/modules/userInformation';
 
 import 'react-chat-elements/dist/main.css';
 import './MainPage.css';
@@ -31,6 +31,11 @@ const MainPage = (props) => {
     }
     props.connectToServer();
     props.push('/dialog');
+    // TODO Test logIn flow for bugs
+  };
+
+  const instagramLoginHandler = () => {
+    props.logInViaInstagram();
   };
 
   const logOutHandler = () => {
@@ -58,6 +63,7 @@ const MainPage = (props) => {
           )}
           <Button backgroundColor="#2dce89" type="submit" text="CONNECT" />
         </form>
+        <Button onClick={instagramLoginHandler} text="LOGIN WITH INSTAGRAM" />
         {username ? (
           <Button
             onClick={logOutHandler}
@@ -86,6 +92,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   push,
   connectToServer,
+  logInViaInstagram,
   logOut,
   logIn,
   authenticate,

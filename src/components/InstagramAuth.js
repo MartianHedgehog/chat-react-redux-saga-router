@@ -1,22 +1,17 @@
-import React from 'react';
-import { Button } from 'react-chat-elements';
-import { push } from 'connected-react-router';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import renderInstagramAuthLink from '../utils/renderInstagramAuthLink';
+import { instagramTokenReceived } from '../store/modules/userInformation';
 
 const InstagramAuth = () => {
-  function onClickRedirect() {
-    const newWindow = window.open(
-      renderInstagramAuthLink(),
-      'instagramAuth',
-      'height=200,width=150',
-    );
-    if (window.focus) newWindow.focus();
-    return false;
-    // window.location = renderInstagramAuthLink();
-  }
-
-  return <Button onClick={onClickRedirect} text="Log in with Instagram" type="button" />;
+  useEffect(() => {
+    window.opener.postMessage(window.location.href.split('=')[1], '*');
+    window.close();
+  });
+  return (
+    <>
+      <p>Processing</p>
+    </>
+  );
 };
 
-export default connect(null, { push })(InstagramAuth);
+export default connect(null, { instagramTokenReceived })(InstagramAuth);

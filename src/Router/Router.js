@@ -6,6 +6,7 @@ import DialogPage from '../pages/ChatPage';
 import PrivateRoute from '../components/PrivateRoute';
 import NoMatch from '../components/NoMatch';
 import Header from '../components/Header';
+import InstagramAuth from '../components/InstagramAuth';
 
 import './Router.css';
 
@@ -14,6 +15,9 @@ const Router = () => {
     <div className="router-container">
       <Header />
       <Switch>
+        <Route path="/instagramauth">
+          <InstagramAuth />
+        </Route>
         <PrivateRoute path="/dialog">
           <DialogPage />
         </PrivateRoute>

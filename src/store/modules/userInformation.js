@@ -3,6 +3,8 @@ import { v4 } from 'uuid';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
+export const LOG_IN_VIA_INSTAGRAM = 'LOG_IN_VIA_INSTAGRAM';
+export const INSTAGRAM_TOKEN_RECEIVED = 'INSTAGRAM_TOKEN_RECEIVED';
 export const USER_ERROR = 'USER_ERROR';
 
 // Reducer
@@ -45,6 +47,15 @@ const userInformation = (state = initialState, action) => {
 
 export const authenticate = () => ({
   type: AUTHENTICATE,
+});
+
+export const logInViaInstagram = () => ({
+  type: LOG_IN_VIA_INSTAGRAM,
+});
+
+export const instagramTokenReceived = (token) => ({
+  type: INSTAGRAM_TOKEN_RECEIVED,
+  token,
 });
 
 export const logOut = () => ({
