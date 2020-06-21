@@ -12,7 +12,7 @@ function* authentication() {
       localStorage.removeItem('username');
       localStorage.removeItem('userId');
     } else {
-      // const info = yield take(LOG_IN)
+      // const info = yield take(LOG_IN);
       yield take(LOG_IN_VIA_INSTAGRAM);
       const info = {
         username: 'hellothere',

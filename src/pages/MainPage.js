@@ -63,7 +63,7 @@ const MainPage = (props) => {
           )}
           <Button backgroundColor="#2dce89" type="submit" text="CONNECT" />
         </form>
-        <Button onClick={instagramLoginHandler} text="LOGIN WITH INSTAGRAM" />
+        {username ? null : <Button onClick={instagramLoginHandler} text="LOGIN WITH INSTAGRAM" />}
         {username ? (
           <Button
             onClick={logOutHandler}
