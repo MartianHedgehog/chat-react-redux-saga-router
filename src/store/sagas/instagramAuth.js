@@ -1,6 +1,6 @@
 import { takeLatest } from 'redux-saga/effects';
 import { LOG_IN_VIA_INSTAGRAM } from '../modules/userInformation';
-import { getInstagramAuthCodeLink, getAccessToken, getUsername } from '../../api/instagramAPI';
+import { getInstagramAuthCodeLink } from '../../api/instagramAPI';
 
 function* logInViaInstagramFlow() {
   const newWindow = window.open(
@@ -8,26 +8,26 @@ function* logInViaInstagramFlow() {
     'InstagramAuth',
     'height=400,width=400',
   );
-  if (window.focus) {
-    newWindow.focus();
-  }
 
-  const whatIsThis = yield new Promise((resolve) => {
-    newWindow.opener.addEventListener('message', (event) => {
-      if (event.origin !== 'https://localhost:3000') {
-        return;
+  newWindow.focus();
+
+  const authCode = yield new Promise((resolve) => {
+    const timer = setInterval(() => {
+      try {
+        if (!newWindow.localStorage) {
+          return;
+        }
+        if (newWindow.location.href.includes('?code=')) {
+          clearInterval(timer);
+          resolve(newWindow.location.href.split('code=')[1].split('#')[0]);
+        }
+      } catch (e) {
+        console.log(e);
       }
-      resolve(event.data);
-    });
-  })
-    .then((authCode) => {
-      return getAccessToken(authCode);
-    })
-    .then((accessToken) => {
-      console.log(accessToken);
-      return getUsername(accessToken);
-    });
-  console.log(whatIsThis);
+    }, 200);
+  });
+
+  console.log(authCode);
 }
 
 export default function* watchInstagramAuth() {

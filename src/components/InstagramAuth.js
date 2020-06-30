@@ -1,13 +1,6 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { instagramTokenReceived } from '../store/modules/userInformation';
+import React from 'react';
 
 const InstagramAuth = () => {
-  useEffect(() => {
-    window.opener.postMessage(window.location.href.split('code=')[1].split('#')[0], '*');
-    window.opener.focus();
-    window.close();
-  });
   return (
     <>
       <p>Processing</p>
@@ -15,4 +8,4 @@ const InstagramAuth = () => {
   );
 };
 
-export default connect(null, { instagramTokenReceived })(InstagramAuth);
+export default InstagramAuth;
