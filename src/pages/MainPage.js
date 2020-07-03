@@ -31,7 +31,6 @@ const MainPage = (props) => {
     }
     props.connectToServer();
     props.push('/dialog');
-    // TODO Test logIn flow for bugs
   };
 
   const instagramLoginHandler = () => {

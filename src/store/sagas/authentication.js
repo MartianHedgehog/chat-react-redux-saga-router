@@ -1,23 +1,17 @@
 import { put, fork, take } from 'redux-saga/effects';
-// eslint-disable-next-line no-unused-vars
-import { logIn, LOG_IN, LOG_OUT, LOG_IN_VIA_INSTAGRAM } from '../modules/userInformation';
+import { logIn, LOG_IN, LOG_OUT } from '../modules/userInformation';
 
 function* authentication() {
   while (true) {
-    const { username } = localStorage;
-    if (username) {
-      yield put(logIn(username));
+    if (localStorage.username) {
+      yield put(logIn(localStorage.username));
 
       yield take(LOG_OUT);
       localStorage.removeItem('username');
       localStorage.removeItem('userId');
     } else {
-      // const info = yield take(LOG_IN);
-      yield take(LOG_IN_VIA_INSTAGRAM);
-      const info = {
-        username: 'hellothere',
-      };
-      localStorage.setItem('username', info.username);
+      const username = yield take(LOG_IN);
+      localStorage.setItem('username', username);
 
       yield take(LOG_OUT);
       localStorage.removeItem('username');
@@ -27,5 +21,7 @@ function* authentication() {
 }
 
 export default function* watchAuthentication() {
-  yield fork(authentication);
+  if (!localStorage.username) {
+    yield fork(authentication);
+  }
 }

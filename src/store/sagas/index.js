@@ -1,5 +1,5 @@
 import watchConnectToServer from './connectToServer';
 import authentication from './authentication';
-import watchInstagramAuth from './instagramAuth';
+import watchInstagramAuthorisation from './instagramAuth';
 
-export default [authentication, watchInstagramAuth, watchConnectToServer];
+export default [authentication, watchInstagramAuthorisation, watchConnectToServer];
